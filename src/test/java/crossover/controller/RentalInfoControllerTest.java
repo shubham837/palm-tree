@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 import java.util.ArrayList;
@@ -78,7 +79,10 @@ public class RentalInfoControllerTest {
 
         when(rentalInfoDao.findAll()).thenReturn(rentalInfos);
 
-        ResponseEntity<RentalInfoListResponse> actual = controller.getRentalInfoList(new Integer(2));
+        ResponseEntity<RentalInfoListResponse> actual = controller.getRentalInfoList(
+                "VILLA", "TESTCITY", "TESTPROVINCE", "TESTCOUNTRY", "TESTZIPCODE",
+                Boolean.FALSE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Double.valueOf(43.5),
+                Double.valueOf(24), Double.valueOf(10), Double.valueOf(2));
         verify(rentalInfoDao, times(1)).findAll();
         verifyNoMoreInteractions(rentalInfoDao);
 

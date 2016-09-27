@@ -34,12 +34,29 @@ public class RentalInfoController {
 
         @RequestMapping(value = "/rental-info",method = RequestMethod.GET)
         @ResponseBody
-        public ResponseEntity<RentalInfoListResponse> getRentalInfoList(Integer limit) {
+        public ResponseEntity<RentalInfoListResponse> getRentalInfoList(
+                @RequestParam(value = "type", required = false) String type,
+                @RequestParam(value = "city", required = false) String city,
+                @RequestParam(value = "province", required = false) String province,
+                @RequestParam(value = "country", required = false) String country,
+                @RequestParam(value = "zip_code", required = false) String zip_code,
+                @RequestParam(value = "has_air_condition", required = false) Boolean has_air_condition,
+                @RequestParam(value = "has_garden", required = false) Boolean has_garden,
+                @RequestParam(value = "has_pool", required = false) Boolean has_pool,
+                @RequestParam(value = "is_close_to_beach", required = false) Boolean is_close_to_beach,
+                @RequestParam(value = "daily_price_lt", required = false) Double daily_price_lesser_than,
+                @RequestParam(value = "daily_price_gt", required = false) Double daily_price_greater_than,
+                @RequestParam(value = "rooms_number_lt", required = false) Double rooms_number_lesser_than,
+                @RequestParam(value = "rooms_number_gt", required = false) Double rooms_number_greater_than) {
+
             RentalInfoListResponse rentalInfoListResponse = new RentalInfoListResponse();
             List<ServiceError> serviceErrors = new ArrayList<>();
             rentalInfoListResponse.setErrors(serviceErrors);
 
             List<RentalInfo> rentalInfos = new ArrayList<>();
+
+            //rentalInfoSolrDao.findByNamedQuery();
+
             try {
                 rentalInfoDao.findAll().forEach(e -> rentalInfos.add(e));
             } catch (Exception e) {
