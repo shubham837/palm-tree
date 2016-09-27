@@ -1,0 +1,45 @@
+version: '2'
+
+services:
+  solr:
+    build:
+      context: .
+      dockerfile: ./compose/solr/Dockerfile
+    ports:
+      - "8983:8983"
+  cassandra:
+    build:
+      context: .
+      dockerfile: ./compose/cassandra/Dockerfile
+    environment:
+      - CASSANDRA_BROADCAST_ADDRESS=192.168.99.100
+    ports:
+      - "9042:9042"
+      - "9160:9160"
+      - "7000:7000"
+      - "7199:7199"
+  redis:
+    image: redis:3.0
+    ports:
+      - "6379:6379"
+  webapp:
+    build:
+      context: .
+      dockerfile: ./compose/webapp/Dockerfile
+    depends_on:
+      - redis
+      - cassandra
+      - solr
+    environment:
+      - cassandra_url=172.21.0.3:9042/crossover
+      - spring.redis.host=192.168.99.100
+      - spring.redis.port=6379
+      - solr.server.host=192.168.99.100
+      - solr.server.port=8983
+    ports:
+      - "80:80"
+    volumes:
+      - .:/src
+    links:
+      - cassandra
+      - solr
