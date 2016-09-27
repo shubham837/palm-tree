@@ -1,5 +1,3 @@
-package crossover;
-
 import com.facebook.presto.sql.tree.Use;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;

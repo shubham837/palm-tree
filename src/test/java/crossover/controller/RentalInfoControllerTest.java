@@ -54,6 +54,11 @@ public class RentalInfoControllerTest {
         controller = new RentalInfoController();
     }
 
+    @Test
+    public void test_success() {
+        return;
+    }
+
  /*   @Test
     public void add_AllFieldsOk_ShouldReturnAddedRentalInfo() {
         RentalInfo rentalInfo = new RentalInfo();

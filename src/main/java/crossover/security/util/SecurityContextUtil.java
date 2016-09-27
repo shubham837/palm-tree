@@ -7,9 +7,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-/**
- * @author Petri Kainulainen
- */
 @Component
 public class SecurityContextUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(SecurityContextUtil.class);

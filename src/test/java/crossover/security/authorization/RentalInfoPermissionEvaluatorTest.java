@@ -41,35 +41,35 @@ public class RentalInfoPermissionEvaluatorTest {
     }
 
     @Test
-    public void hasPermission_AnonymousUser_ShouldReturnFalse() {
+    public void test_hasPermission_AnonymousUser_ShouldReturnFalse() {
         Authentication anonymous = createAuthenticationForAnonymousUser();
         boolean hasPermission = permissionEvaluator.hasPermission(anonymous, DOMAIN_OBJECT_TODO, PERMISSION_ADD);
         assertFalse(hasPermission);
     }
 
     @Test
-    public void hasPermission_UserIsLoggedInAndTargetDomainObjectIsUnknown_ShouldReturnFalse() {
+    public void test_hasPermission_UserIsLoggedInAndTargetDomainObjectIsUnknown_ShouldReturnFalse() {
         Authentication loggedInUser = createAuthenticationForLoggedInUser(SecurityRole.ROLE_USER.name());
         boolean hasPermission = permissionEvaluator.hasPermission(loggedInUser, new RentalInfo(), PERMISSION_ADD);
         assertFalse(hasPermission);
     }
 
     @Test
-    public void hasPermission_UserIsLoggedInButHasUnknownRole_ShouldReturnFalse() {
+    public void test_hasPermission_UserIsLoggedInButHasUnknownRole_ShouldReturnFalse() {
         Authentication loggedInUser = createAuthenticationForLoggedInUser(ROLE_UNKNOWN);
         boolean hasPermission = permissionEvaluator.hasPermission(loggedInUser, DOMAIN_OBJECT_TODO, PERMISSION_ADD);
         assertFalse(hasPermission);
     }
 
     @Test
-    public void hasPermission_UserIsLoggedIn_ShouldReturnTrue() {
+    public void test_hasPermission_UserIsLoggedIn_ShouldReturnTrue() {
         Authentication loggedInUser = createAuthenticationForLoggedInUser(SecurityRole.ROLE_USER.name());
         boolean hasPermission = permissionEvaluator.hasPermission(loggedInUser, DOMAIN_OBJECT_TODO, PERMISSION_ADD);
         assertTrue(hasPermission);
     }
 
     @Test
-    public void hasPermission_MethodNotImplemented_ShouldReturnFalse() {
+    public void test_hasPermission_MethodNotImplemented_ShouldReturnFalse() {
         Authentication loggedInUser = createAuthenticationForLoggedInUser(SecurityRole.ROLE_USER.name());
         boolean hasPermission = permissionEvaluator.hasPermission(loggedInUser, TARGET_ID, DOMAIN_OBJECT_TODO, PERMISSION_ADD);
         assertFalse(hasPermission);

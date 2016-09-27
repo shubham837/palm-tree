@@ -24,7 +24,7 @@ public class RestAuthenticationFailureHandlerTest {
     }
 
     @Test
-    public void onAuthenticationFailure_ShouldSetResponseStatusToUnauthorized() throws IOException, ServletException {
+    public void test_onAuthenticationFailure_ShouldSetResponseStatusToUnauthorized() throws IOException, ServletException {
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
         AuthenticationException ex = new BadCredentialsException("");

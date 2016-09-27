@@ -1,6 +1,6 @@
 package crossover.security.authentication;
 
-import crossover.security.authentication.RestLogoutSuccessHandler;
+import crossover.security.authentication.RestAuthenticationSuccessHandler;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -9,29 +9,28 @@ import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static junit.framework.Assert.assertEquals;
 
 
-public class RestLogoutSuccessHandlerTest {
+public class RestAuthenticationSuccessHandlerTest {
 
-    private RestLogoutSuccessHandler logoutSuccessHandler;
+    private RestAuthenticationSuccessHandler successHandler;
 
     @Before
     public void setUp() {
-        logoutSuccessHandler = new RestLogoutSuccessHandler();
+        successHandler = new RestAuthenticationSuccessHandler();
     }
 
     @Test
-    public void onLogoutSuccess_ShouldSetStatusToOk() throws IOException, ServletException {
+    public void test_onAuthenticationSuccess_ShouldSetResponseStatusToOk() throws ServletException, IOException {
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
         Authentication authentication = new TestingAuthenticationToken(null, null);
 
-        logoutSuccessHandler.onLogoutSuccess(request, response, authentication);
+        successHandler.onAuthenticationSuccess(request, response, authentication);
 
-        assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+        assertEquals(MockHttpServletResponse.SC_OK, response.getStatus());
     }
 }
