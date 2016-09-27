@@ -11,11 +11,11 @@ import java.util.List;
  */
 public interface RentalInfoSolrDao extends CustomBaseRepository<RentalInfo, String> {
 
-    public List<RentalInfo> findByType(String type, Pageable page);
+    public List<RentalInfo> findByType(String type, Pageable page) throws Exception;
 
     @Query(name = "RentalInfo.findByNamedQuery")
-    public List<RentalInfo> findByNamedQuery(String searchTerm, Pageable page);
+    public List<RentalInfo> findByNamedQuery(String searchTerm, Pageable page) throws Exception;
 
     @Query("type:*?0* OR city:*?0*")
-    public List<RentalInfo> findByQueryAnnotation(String searchTerm, Pageable page);
+    public List<RentalInfo> findByQueryAnnotation(String searchTerm, Pageable page) throws Exception;
 }

@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface RentalInfoDao extends CassandraRepository<RentalInfo> {
 
     @Query("SELECT * FROM cr_rental_info WHERE id=?0")
-    RentalInfo findById(String id);
+    RentalInfo findById(String id) throws Exception;
 
     @Query("DELETE FROM cr_rental_info WHERE id=?0")
     Boolean deleteById(String id);

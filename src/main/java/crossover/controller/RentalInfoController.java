@@ -59,10 +59,19 @@ public class RentalInfoController {
             List<ServiceError> serviceErrors = new ArrayList<>();
             rentalInfoDetailResponse.setErrors(serviceErrors);
 
-            RentalInfo rentalInfo = rentalInfoDao.findById(rental_info_id);
+            RentalInfo rentalInfo = null;
+            try {
+                rentalInfo = rentalInfoDao.findById(rental_info_id);
+            }catch (Exception e){
+                log.error("Error in fetching rental info from database, RentalInfoId: {}, Error: ", rental_info_id, e.getMessage());
+                serviceErrors.add(new ServiceError(1, "Error in fetching Rental Info"));
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body(rentalInfoDetailResponse);
+            }
 
             if(rentalInfo == null) {
                 log.error("Rental Info not exist for Id: " + rental_info_id);
+                serviceErrors.add(new ServiceError(2, "Rental Info not found"));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(rentalInfoDetailResponse);
             }
 
             rentalInfoDetailResponse.setRentalInfo(rentalInfo);
@@ -81,7 +90,15 @@ public class RentalInfoController {
             rentalInfo.setId(UUID.randomUUID().toString());
 
             rentalInfo.setLastModifiedBy(userId.toString());
-            rentalInfoDao.save(rentalInfo);
+            try {
+                log.info("Creating rental info in database");
+                rentalInfoDao.save(rentalInfo);
+            }catch (Exception e) {
+                log.error("Exception in updating creating rental info in database, Error: {}", e.getMessage());
+                serviceErrors.add(new ServiceError(1, "Error in saving Rental Info"));
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body(rentalInfoDetailResponse);
+            }
+
             try {
                 rentalInfoSolrDao.save(rentalInfo);
                 log.info("Indexed Rental Info to Solr");
@@ -103,7 +120,22 @@ public class RentalInfoController {
 
             rentalInfo.setUpdatedTs(new Date());
             rentalInfo.setId(rental_info_id);
-            rentalInfoDao.save(rentalInfo);
+
+            try {
+                log.info("Updating rental info in database, RentalInfoId: {}", rental_info_id);
+                rentalInfoDao.save(rentalInfo);
+            }catch (Exception e) {
+                log.error("Exception in updating existing rental info in database, RentalInfoId: {}, Error: {}", rental_info_id, e.getMessage());
+                serviceErrors.add(new ServiceError(1, "Error in saving Rental Info"));
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body(rentalInfoDetailResponse);
+            }
+
+            try {
+                log.info("Updating Index for existing rental Info RentalInfoId: {}", rental_info_id);
+                rentalInfoSolrDao.save(rentalInfo);
+            } catch (Exception e) {
+                log.error("Exception in updating index for existing rental info {}", e.getMessage());
+            }
 
             rentalInfoDetailResponse.setRentalInfo(rentalInfo);
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(rentalInfoDetailResponse);

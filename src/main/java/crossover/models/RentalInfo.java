@@ -80,17 +80,15 @@ public class RentalInfo {
     @Column(value = "rooms_number")
     private double roomsNumber;
 
-    @Indexed
-    @Field
+
     @Column(value = "created_ts")
     private Date createdTs;
 
-    @Indexed
-    @Field
+
     @Column(value = "updated_ts")
     private Date updatedTs;
 
-    @Field
+
     @Column(value = "last_modified_by")
     private String lastModifiedBy;
 

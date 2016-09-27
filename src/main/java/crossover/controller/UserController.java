@@ -116,6 +116,7 @@ public class UserController {
         existingUser.patch(user);
         userDao.save(existingUser);
 
+
         userDetailResponse.setUser(existingUser);
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(userDetailResponse);
     }
