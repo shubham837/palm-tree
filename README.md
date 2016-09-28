@@ -22,9 +22,16 @@ Setup instructions are mentioned below
 ## Standalone Environment (Manually)
 1) Install maven build tool and jdk1.8 </br>
 2) Clone the repository and pull the latest change. </br>
-3) Build the application using the command `mvn clean install`. This step would run test cases too.</br>
+3) Install apache Cassandra < 3.0 (use version 2.2.7) and solr. </br>
+4) Start Cassandra Server with command `sudo <cassandra_dir>/bin/cassandra start`  </br>
+5) Create Keyspace in cassandra with command `<cassandra_dir>/bin/cqlsh -f <source_dir>/compose/cassandra/database_creation.cql` </br>
+6) Start Solr Server with command `<solr_dir>/bin/solr start`  </br>
+7) Create Solr Core with command  `<solr_dir>/bin/solr create_core -c crossover` </br>
+8) Create Solr Schema with command `cp <source_dir>/compose/solr/managed-schema <solr_dir>/server/solr/crossover/conf/`  </br>
+9) Restart solr server to pick the created schema with command `<solr_dir>/bin/solr restart`  </br>
+10) Build the application using the command `mvn clean install`. This step would run test cases too.</br>
   Jar file is created in folder '/Users/<user_name>/.m2/repository/com/crossover/crossover/1.0-SNAPSHOT/crossover-1.0-SNAPSHOT.jar' </br>
-4) Run the jar file using the command `java -jar /Users/<user_name>/.m2/repository/com/crossover/crossover/1.0-SNAPSHOT/crossover-1.0-SNAPSHOT.jar` </br>
+11) Run the jar file using the command `java -jar /Users/<user_name>/.m2/repository/com/crossover/crossover/1.0-SNAPSHOT/crossover-1.0-SNAPSHOT.jar` </br>
 
 ## Using Docker
 1) Install and Initialize docker-machine using link https://docs.docker.com/machine/get-started/ </br>
