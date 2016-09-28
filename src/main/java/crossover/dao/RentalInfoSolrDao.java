@@ -1,10 +1,7 @@
 package crossover.dao;
 
 import crossover.models.RentalInfo;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.geo.Box;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.data.solr.repository.Facet;
@@ -16,16 +13,19 @@ import java.util.List;
 /**
  * Created by shubham.singhal on 26/09/16.
  */
-public interface RentalInfoSolrDao extends CustomBaseRepository<RentalInfo, String> {
+public interface RentalInfoSolrDao extends org.springframework.data.solr.repository.SolrCrudRepository<RentalInfo, String> {
 
-    public List<RentalInfo> findByType(String type, Pageable page) throws Exception;
+
+    @Query(name = "RentalInfo.findByGeneralSearchQuery")
+    public List<RentalInfo> findByGeneralSearchQuery(String searchTerm, Pageable page) throws Exception;
 
     @Query(name = "RentalInfo.findByNamedQuery")
-    public List<RentalInfo> findByNamedQuery(String searchTerm, Pageable page) throws Exception;
+    public List<RentalInfo> findByNamedQuery(String type, String city, String province, String Country, String zipCode,
+                                             String hasAirCondition, String hasGarden, String hasPool, String isCloseToBeach,
+                                             String dailyPriceLow, String dailyPriceHigh, String roomsNumberLow, String roomsNumberHigh) throws Exception;
 
     @Query("type:*?0* OR city:*?0*")
     public List<RentalInfo> findByQueryAnnotation(String searchTerm, Pageable page) throws Exception;
-
 
 
     @Query(value = "*:*")
@@ -33,8 +33,8 @@ public interface RentalInfoSolrDao extends CustomBaseRepository<RentalInfo, Stri
     FacetPage<RentalInfo> findAllFacetOnType(Pageable page);
 
     @Query(value = "*:*")
-    @Facet(fields = { "Type", "isCloseToBeach" })
-    FacetPage<RentalInfo> findAllFacetOnTypeyAndIsCloseToBeach(Pageable page);
+    @Facet(fields = { "type", "isCloseToBeach" })
+    FacetPage<RentalInfo> findAllFacetOnTypeAndIsCloseToBeach(Pageable page);
 
     @Query(value = "*:*")
     @Facet(queries = { "roomsNumber:[* TO ?0]" })
@@ -62,7 +62,26 @@ public interface RentalInfoSolrDao extends CustomBaseRepository<RentalInfo, Stri
     @Highlight(prefix = "<b>", postfix = "</b>")
     HighlightPage<RentalInfo> findByTypeHighlightAllWithPreAndPostfix(String type, Pageable page);
 
+    @Query("type:?0* AND hasGarden:?1")
+    List<RentalInfo> findByTypeAndHasGarden(String type, Boolean hasGarden);
+
+    public List<RentalInfo> findByType(String type, Pageable page) throws Exception;
+
     List<RentalInfo> findByCity(String city, Pageable page);
+
+    List<RentalInfo> findByProvince(String province, Pageable page);
+
+    List<RentalInfo> findByCountry(String country, Pageable page);
+
+    List<RentalInfo> findByZipCode(String zipCode, Pageable page);
+
+    List<RentalInfo> findByTypeAndHasAirConditionTrue();
+
+    List<RentalInfo> findByTypeAndIsCloseToBeachTrue();
+
+    List<RentalInfo> findByTypeAndHasGardenFalse();
+
+    List<RentalInfo> findByTypeAndHasPoolTrue();
 
     List<RentalInfo> findByDailyPriceBetween(double low, double up);
 
@@ -75,10 +94,5 @@ public interface RentalInfoSolrDao extends CustomBaseRepository<RentalInfo, Stri
     List<RentalInfo> findByTypeLike(String type);
 
     List<RentalInfo> findByTypeStartsWith(String type);
-
-    List<RentalInfo> findByTypeAndHasAirConditionTrue(String type);
-
-    List<RentalInfo> findByTypeAndIsCloseToBeachFalse(String type);
-
 
 }

@@ -160,7 +160,7 @@ public class RentalInfoIT {
                 .contentType("application/json")
                 .headers(headers)
                 .when()
-                .get(RENTAL_INFO_RESOURCE)
+                .get(RENTAL_INFO_RESOURCE + "?type=Villa")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .contentType(ContentType.JSON)

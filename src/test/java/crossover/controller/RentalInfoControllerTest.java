@@ -6,6 +6,7 @@ import crossover.dao.RentalInfoSolrDao;
 import crossover.models.RentalInfo;
 import crossover.responses.RentalInfoDetailResponse;
 import crossover.responses.RentalInfoListResponse;
+import org.springframework.data.solr.core.query.SolrPageRequest;
 import org.springframework.http.HttpStatus;
 import org.junit.Before;
 import org.junit.Test;
@@ -70,19 +71,46 @@ public class RentalInfoControllerTest {
     }
 
     @Test
-    public void testGetRentalInfoListSuccess() {
+    public void testGetRentalInfoListSolrSuccess() throws Exception{
 
         RentalInfo rentalInfo = getRentalInfo();
 
         List<RentalInfo> rentalInfos = new ArrayList<>();
         rentalInfos.add(rentalInfo);
 
-        when(rentalInfoDao.findAll()).thenReturn(rentalInfos);
+        when(rentalInfoSolrDao.findByGeneralSearchQuery("Villa", new SolrPageRequest(1, 20))).thenReturn(rentalInfos);
 
-        ResponseEntity<RentalInfoListResponse> actual = controller.getRentalInfoList(
-                "VILLA", "TESTCITY", "TESTPROVINCE", "TESTCOUNTRY", "TESTZIPCODE",
+        ResponseEntity<RentalInfoListResponse> actual = controller.getRentalInfoList("Villa",
+                "Villa", "TESTCITY", "TESTPROVINCE", "TESTCOUNTRY", "TESTZIPCODE",
                 Boolean.FALSE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Double.valueOf(43.5),
                 Double.valueOf(24), Double.valueOf(10), Double.valueOf(2));
+        verify(rentalInfoSolrDao, times(1)).findByGeneralSearchQuery("Villa", new SolrPageRequest(1, 20));
+        verifyZeroInteractions(rentalInfoDao);
+
+        assertEquals(actual.getStatusCode(), HttpStatus.OK);
+        assertEquals(actual.getBody().getRentalInfos().size(), 1);
+        assertEquals(actual.getBody().getRentalInfos().get(0).getCity(), RENTAL_CITY);
+        assertEquals(actual.getBody().getRentalInfos().get(0).getCountry(), RENTAL_COUNTRY);
+        assertEquals(actual.getBody().getRentalInfos().get(0).getType(), RENTAL_TYPE);
+    }
+
+    @Test
+    public void testGetRentalInfoListDBFallbackSuccess() throws Exception{
+
+        RentalInfo rentalInfo = getRentalInfo();
+
+        List<RentalInfo> rentalInfos = new ArrayList<>();
+        rentalInfos.add(rentalInfo);
+
+        when(rentalInfoSolrDao.findByGeneralSearchQuery("Villa", new SolrPageRequest(1, 20))).thenThrow(new Exception("Solr Exception"));
+        when(rentalInfoDao.findAll()).thenReturn(rentalInfos);
+
+        ResponseEntity<RentalInfoListResponse> actual = controller.getRentalInfoList("Villa",
+                "Villa", "TESTCITY", "TESTPROVINCE", "TESTCOUNTRY", "TESTZIPCODE",
+                Boolean.FALSE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Double.valueOf(43.5),
+                Double.valueOf(24), Double.valueOf(10), Double.valueOf(2));
+
+        verify(rentalInfoSolrDao, times(1)).findByGeneralSearchQuery("Villa", new SolrPageRequest(1, 20));
         verify(rentalInfoDao, times(1)).findAll();
         verifyNoMoreInteractions(rentalInfoDao);
 
