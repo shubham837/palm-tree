@@ -32,9 +32,19 @@ Setup instructions are mentioned below
 10) Build the application using the command `mvn clean install`. This step would run test cases too.</br>
   Jar file is created in folder '/Users/<user_name>/.m2/repository/com/crossover/crossover/1.0-SNAPSHOT/crossover-1.0-SNAPSHOT.jar' </br>
 11) Run the jar file using the command `java -jar /Users/<user_name>/.m2/repository/com/crossover/crossover/1.0-SNAPSHOT/crossover-1.0-SNAPSHOT.jar` </br>
+12) Application is ready to serve the user on IP: 127.0.0.1 and port:8080
 
 ## Using Docker
 1) Install and Initialize docker-machine using link https://docs.docker.com/machine/get-started/ </br>
 2) After installation set the environment variable for docker machine `eval "$(docker-machine env default)"`
 3) Run test cases with command `make test`
 4) Run the application with command `make setup`
+5) Application is ready to serve the user on IP: `docker-machine ip` (192.168.99.100) and port:8080
+
+
+# Usage:
+1) API's Endpoints Exposed in web application are:
+   a) HTTP POST /rental-info
+   b) HTTP PUT  /rental-info/{rental_info_id}
+   c) HTTP GET  /rental-info/{rental_info_id}
+   d) HTTP GET  /rental-info?general_term=xyz&type=Villa&city=SanMateo
