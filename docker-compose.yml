@@ -39,7 +39,7 @@ services:
       - solr.server.host=192.168.99.100
       - solr.server.port=8983
     ports:
-      - "80:80"
+      - "8080:8080"
     volumes:
       - .:/src
     links:

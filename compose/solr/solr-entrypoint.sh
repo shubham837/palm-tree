@@ -35,6 +35,7 @@ echo "Reloading updated schema on Solr Server"
 /opt/solr/bin/solr restart
 sleep 10
 
-java -Dtype=text/csv -Durl=http://localhost:8983/solr/crossover/update -jar ~/opt/packages/solr-6.1.0/example/exampledocs/post.jar  crossover_data.csv
+echo "Indexing existing data"
+java -Dtype=text/csv -Durl=http://localhost:8983/solr/crossover/update -jar ~/opt/packages/solr-6.1.0/example/exampledocs/post.jar  /tmp/crossover_data.csv
 } </dev/null >$OUTPUT 2>&1 &
 tail -f /dev/null
