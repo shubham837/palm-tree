@@ -71,7 +71,7 @@ public class RentalInfoControllerTest {
     }
 
     @Test
-    public void testGetRentalInfoListSolrSuccess() throws Exception{
+    public void testGetRentalInfoListGeneralSearchSolrSuccess() throws Exception{
 
         RentalInfo rentalInfo = getRentalInfo();
 
@@ -92,6 +92,65 @@ public class RentalInfoControllerTest {
         assertEquals(actual.getBody().getRentalInfos().get(0).getCity(), RENTAL_CITY);
         assertEquals(actual.getBody().getRentalInfos().get(0).getCountry(), RENTAL_COUNTRY);
         assertEquals(actual.getBody().getRentalInfos().get(0).getType(), RENTAL_TYPE);
+    }
+
+    @Test
+    public void testGetRentalInfoListSpecificSearchSolrSuccess() throws Exception{
+
+        RentalInfo rentalInfo = getRentalInfo();
+
+        List<RentalInfo> rentalInfos = new ArrayList<>();
+        rentalInfos.add(rentalInfo);
+
+        when(rentalInfoSolrDao.findByNamedQuery("Villa", "TESTCITY", "TESTPROVINCE", "TESTCOUNTRY", "TESTZIPCODE",
+                Boolean.FALSE.toString(), Boolean.FALSE.toString(), Boolean.TRUE.toString(), Boolean.FALSE.toString(),
+                Double.valueOf(24).toString(), Double.valueOf(43.5).toString(), Double.valueOf(2).toString(),
+                Double.valueOf(10).toString())).thenReturn(rentalInfos);
+
+        ResponseEntity<RentalInfoListResponse> actual = controller.getRentalInfoList(null,
+                "Villa", "TESTCITY", "TESTPROVINCE", "TESTCOUNTRY", "TESTZIPCODE",
+                Boolean.FALSE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Double.valueOf(43.5),
+                Double.valueOf(24), Double.valueOf(10), Double.valueOf(2));
+
+        verify(rentalInfoSolrDao, times(1)).findByNamedQuery("Villa", "TESTCITY", "TESTPROVINCE", "TESTCOUNTRY", "TESTZIPCODE",
+                Boolean.FALSE.toString(), Boolean.FALSE.toString(), Boolean.TRUE.toString(), Boolean.FALSE.toString(),
+                Double.valueOf(24).toString(), Double.valueOf(43.5).toString(), Double.valueOf(2).toString(), Double.valueOf(10).toString());
+
+        verifyZeroInteractions(rentalInfoDao);
+
+        assertEquals(actual.getStatusCode(), HttpStatus.OK);
+        assertEquals(actual.getBody().getRentalInfos().size(), 1);
+        assertEquals(actual.getBody().getRentalInfos().get(0).getCity(), RENTAL_CITY);
+        assertEquals(actual.getBody().getRentalInfos().get(0).getCountry(), RENTAL_COUNTRY);
+        assertEquals(actual.getBody().getRentalInfos().get(0).getType(), RENTAL_TYPE);
+    }
+
+    @Test
+    public void testGetRentalInfoListSpecificSearchMissingSolrSuccess() throws Exception{
+
+        RentalInfo rentalInfo = getRentalInfo();
+
+        List<RentalInfo> rentalInfos = new ArrayList<>();
+        rentalInfos.add(rentalInfo);
+
+        when(rentalInfoSolrDao.findByNamedQuery("Villa", "TEST_CITY", "TESTPROVINCE", "TESTCOUNTRY", "TESTZIPCODE",
+                "*", Boolean.FALSE.toString(), Boolean.TRUE.toString(), Boolean.FALSE.toString(),
+                "*", Double.valueOf(43.5).toString(), Double.valueOf(2).toString(),
+                Double.valueOf(10).toString())).thenReturn(rentalInfos);
+
+        ResponseEntity<RentalInfoListResponse> actual = controller.getRentalInfoList(null,
+                "Villa", "TEST_CITY", "TESTPROVINCE", "TESTCOUNTRY", "TESTZIPCODE",
+                null, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Double.valueOf(43.5),
+                null, Double.valueOf(10), Double.valueOf(2));
+
+        verify(rentalInfoSolrDao, times(1)).findByNamedQuery("Villa", "TEST_CITY", "TESTPROVINCE", "TESTCOUNTRY", "TESTZIPCODE",
+                "*", Boolean.FALSE.toString(), Boolean.TRUE.toString(), Boolean.FALSE.toString(),
+                "*", Double.valueOf(43.5).toString(), Double.valueOf(2).toString(), Double.valueOf(10).toString());
+
+        verifyZeroInteractions(rentalInfoDao);
+
+        assertEquals(actual.getStatusCode(), HttpStatus.OK);
+        assertEquals(actual.getBody().getRentalInfos().size(), 1);
     }
 
     @Test

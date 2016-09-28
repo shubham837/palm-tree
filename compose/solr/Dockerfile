@@ -1,7 +1,7 @@
 FROM solr:6.1.0
 
 COPY compose/solr/solr-entrypoint.sh /usr/local/bin/
-COPY compose/solr/schema.xml /tmp/
+COPY compose/solr/managed-schema /tmp/
 USER root
 RUN  chmod +x /usr/local/bin/solr-entrypoint.sh
 USER solr

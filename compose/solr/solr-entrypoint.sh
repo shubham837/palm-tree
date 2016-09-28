@@ -1,12 +1,16 @@
 #!/bin/bash
 COLLECTION="crossover"
 echo "Starting solr server"
+
 /opt/solr/bin/solr start
+
 echo "$COLLECTION"
+
 if [[ -d "/opt/solr/server/solr/$COLLECTION" ]]; then
   echo "$COLLECTION is already present on disk"
   exit 0
 fi
+
 OUTPUT=/opt/solr/myscript.out
 echo "starting $0; logging to $OUTPUT"
 {
@@ -21,6 +25,16 @@ if wget -O - 'http://localhost:8983/solr/admin/cores' | grep $COLLECTION; then
 fi
 echo creating $COLLECTION core
 /opt/solr/bin/solr create_core -c $COLLECTION
-echo created $COLLECTION core
+echo "created $COLLECTION core"
+
+echo "updating schema"
+mv /tmp/managed-schema /opt/solr/server/solr/crossover/conf/
+
+echo "Reloading updated schema on Solr Server"
+
+/opt/solr/bin/solr restart
+sleep 10
+
+java -Dtype=text/csv -Durl=http://localhost:8983/solr/crossover/update -jar ~/opt/packages/solr-6.1.0/example/exampledocs/post.jar  crossover_data.csv
 } </dev/null >$OUTPUT 2>&1 &
 tail -f /dev/null

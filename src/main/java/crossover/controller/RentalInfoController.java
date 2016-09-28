@@ -207,6 +207,7 @@ public class RentalInfoController {
             if(value == null) {
                 return "*";
             }
+
             return value.toString();
         }
 }

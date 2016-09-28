@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: ./compose/solr/Dockerfile
+    environment:
+      - SOLR_CORE_NAME=crossover
     ports:
       - "8983:8983"
   cassandra:

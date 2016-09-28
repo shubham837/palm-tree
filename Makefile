@@ -89,6 +89,8 @@ dosetup:
 	$(DOCKER_MACHINE_ENV)
 	$(BASE_COMMAND) up -d cassandra
 	@sleep 3.5
+	$(BASE_COMMAND) up -d solr
+	@sleep 3.5
 	$(BASE_COMMAND) run webapp mvn clean install
 
 dobuild:

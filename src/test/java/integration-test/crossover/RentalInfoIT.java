@@ -166,6 +166,29 @@ public class RentalInfoIT {
                 .contentType(ContentType.JSON)
                 .body("errors", emptyCollectionOf(List.class))
                 .extract().response();
+
+        assert response.getStatusCode() == 200;
+
+    }
+
+    @Test
+    public void testGetRentalInfoListGeneralSearchAPI() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("AUTH_KEY", ADMIN_AUTH_KEY);
+        headers.put("ACCESS_TOKEN", ADMIN_ACCESS_TOKEN);
+
+        Response response = given()
+                .contentType("application/json")
+                .headers(headers)
+                .when()
+                .get(RENTAL_INFO_RESOURCE + "?general_term=Villa")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .contentType(ContentType.JSON)
+                .body("errors", emptyCollectionOf(List.class))
+                .extract().response();
+
+        assert response.getStatusCode() == 200;
     }
 
     @Test
