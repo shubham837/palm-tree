@@ -30,20 +30,20 @@ Setup instructions are mentioned below
 8) Create Solr Schema with command `cp <source_dir>/compose/solr/managed-schema <solr_dir>/server/solr/crossover/conf/`  </br>
 9) Restart solr server to pick the created schema with command `<solr_dir>/bin/solr restart`  </br>
 10) Build the application using the command `mvn clean install`. This step would run test cases too.</br>
-  Jar file is created in folder '/Users/<user_name>/.m2/repository/com/crossover/crossover/1.0-SNAPSHOT/crossover-1.0-SNAPSHOT.jar' </br>
+  Jar file is created in folder `/Users/<user_name>/.m2/repository/com/crossover/crossover/1.0-SNAPSHOT/crossover-1.0-SNAPSHOT.jar` </br>
 11) Run the jar file using the command `java -jar /Users/<user_name>/.m2/repository/com/crossover/crossover/1.0-SNAPSHOT/crossover-1.0-SNAPSHOT.jar` </br>
 12) Application is ready to serve the user on IP: 127.0.0.1 and port:8080
 
 ## Using Docker
 1) Install and Initialize docker-machine using link https://docs.docker.com/machine/get-started/ </br>
-2) After installation set the environment variable for docker machine `eval "$(docker-machine env default)"`
-3) Run test cases with command `make test`
-4) Run the application with command `make setup`
-5) Application is ready to serve the user on IP: `docker-machine ip` (192.168.99.100) and port:8080
+2) After installation set the environment variable for docker machine `eval "$(docker-machine env default)"` </br>
+3) Run test cases with command `make test` </br>
+4) Run the application with command `make setup` </br>
+5) Application is ready to serve the user on IP: `docker-machine ip` (192.168.99.100) and port:8080 </br>
 
 
 # Usage:
-1) API's Endpoints Exposed in web application are:
+1) API's Endpoints Exposed in web application are: </br>
    a) HTTP POST /rental-info </br>
    b) HTTP PUT  /rental-info/{rental_info_id}  </br>
    c) HTTP GET  /rental-info/{rental_info_id} </br>
