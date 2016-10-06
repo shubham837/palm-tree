@@ -44,7 +44,7 @@ Setup instructions are mentioned below
 
 # Usage:
 1) API's Endpoints Exposed in web application are:
-   a) HTTP POST /rental-info
-   b) HTTP PUT  /rental-info/{rental_info_id}
-   c) HTTP GET  /rental-info/{rental_info_id}
-   d) HTTP GET  /rental-info?general_term=xyz&type=Villa&city=SanMateo
+   a) HTTP POST /rental-info </br>
+   b) HTTP PUT  /rental-info/{rental_info_id}  </br>
+   c) HTTP GET  /rental-info/{rental_info_id} </br>
+   d) HTTP GET  /rental-info?general_term=xyz&type=Villa&city=SanMateo  </br>
