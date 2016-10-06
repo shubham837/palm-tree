@@ -11,9 +11,9 @@ Technologies/Library used in rental-info Application:<br/>
 3) Spring-boot </br>
 4) gson for Deserialization </br>
 5) Apache HttpComponents </br>
-6) Cassandra for Persistence
-7) Solr for Searching
-8) Redis for caching
+6) Cassandra for Persistence  </br>
+7) Solr for Searching </br>
+8) Redis for caching </br>
 
 # Setup instructions
 This application can be run in standalone environment or inside a container on the machine.
